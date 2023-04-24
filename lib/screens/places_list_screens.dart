@@ -1,12 +1,11 @@
-import 'dart:ffi';
 
-import 'package:amnesia_place/providers/places.dart';
-import 'package:amnesia_place/screens/add_place_screen.dart';
-import 'package:amnesia_place/screens/place_details_screen.dart';
+import 'package:favorite_places/screens/place_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './place_details_screen.dart';
+import '../providers/places.dart';
+import 'add_place_screen.dart';
+
 
 class PlacesListScreen extends StatelessWidget {
   const PlacesListScreen({Key key}) : super(key: key);
@@ -15,43 +14,44 @@ class PlacesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blueGrey,
         title: Text('Your Places'),
         // actions: <Widget>[
 
         // ],
       ),
       body: FutureBuilder(
-        future: Provider.of<Places>(context, listen: false).fetchAndSetPlaces(),
+        future: Provider.of<ViewModel>(context, listen: false).fetchAndSetPlaces(),
         builder: (ctx, snapShot) => snapShot.connectionState ==
                 ConnectionState.waiting
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : Consumer<Places>(
+            : Consumer<ViewModel>(
                 child: Center(
                   child: const Text('Got no places yet, start adding some!'),
                 ),
-                builder: (ctx, places, ch) => places.items.isEmpty
+                builder: (ctx, places, ch) => places.placeItems.isEmpty
                     ? ch
                     : ListView.builder(
-                        itemCount: places.items.length,
+                        itemCount: places.placeItems.length,
                         itemBuilder: (ctx, i) => Container(
                           margin: const EdgeInsets.all(6.0),
                           child: ListTile(
                             leading: CircleAvatar(
                               radius: 40,
                               backgroundImage: FileImage(
-                                places.items[i].image,
+                                places.placeItems[i].image,
                               ),
                             ),
                             title: Text(
-                              places.items[i].title,
+                              places.placeItems[i].title,
                               style: TextStyle(
                                 fontSize: 21,
                               ),
                             ),
                             subtitle: Text(
-                              places.items[i].location.address,
+                              places.placeItems[i].location.address,
                               style: TextStyle(
                                 fontSize: 15,
                               ),
@@ -59,7 +59,7 @@ class PlacesListScreen extends StatelessWidget {
                             onTap: () {
                               Navigator.of(context).pushNamed(
                                 PlaceDetailsScreen.routeName,
-                                arguments: places.items[i].id,
+                                arguments: places.placeItems[i].id,
                               );
                             },
                           ),

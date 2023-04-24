@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,19 +13,24 @@ import '../widgets/location_input.dart';
 class AddPlaceScreen extends StatefulWidget {
   static const routeName = '/add-place';
 
-  AddPlaceScreen({Key key}) : super(key: key);
+  const AddPlaceScreen({Key key}) : super(key: key);
 
   @override
-  _AddPlaceScreenState createState() => _AddPlaceScreenState();
+  AddPlaceScreenState createState() => AddPlaceScreenState();
 }
 
-class _AddPlaceScreenState extends State<AddPlaceScreen> {
+class AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleController = TextEditingController();
   File _pickedImage;
+  Uint8List _webImage;
   PlaceLocation _pickedLocation;
 
   void _selectImage(File pickedImage) {
     _pickedImage = pickedImage;
+  }
+
+  void _selectImageForWeb(Uint8List pickedImage) {
+    _webImage = pickedImage;
   }
 
   void _selectPlace(double lat, double lng) {
@@ -31,13 +38,14 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   }
 
   void _savePlace() {
+    print("title: ${_titleController.text.isEmpty}, _pickedImage: ${_pickedImage}, _pickedLocation: ${_pickedLocation}");
     if (_titleController.text.isEmpty ||
         _pickedImage == null ||
         _pickedLocation == null) {
       return;
     }
 
-    Provider.of<Places>(context, listen: false)
+    Provider.of<ViewModel>(context, listen: false)
         .addPlaces(_titleController.text, _pickedImage, _pickedLocation);
     Navigator.of(context).pop();
   }

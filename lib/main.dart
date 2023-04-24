@@ -1,3 +1,4 @@
+import 'package:favorite_places/widgets/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,16 +15,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: Places(),
+      value: ViewModel(),
       child: MaterialApp(
         title: 'Great Places',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          accentColor: Colors.amber,
+          primarySwatch: Colors.blueGrey,
+          accentColor: Colors.amberAccent,
           fontFamily: 'Lato',
-          
         ),
-        home: PlacesListScreen(),
+        home: Scaffold (
+          body: SafeArea (
+            child:  BasicBottomNavBar(),
+          ),
+          // bottomNavigationBar: BasicBottomNavBar(),
+        ),
+        // home: PlacesListScreen(),
         routes: {
           AddPlaceScreen.routeName: (ctx) => AddPlaceScreen(),
           PlaceDetailsScreen.routeName: (ctx) => PlaceDetailsScreen(),

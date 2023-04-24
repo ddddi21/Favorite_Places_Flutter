@@ -10,8 +10,8 @@ class MapScreen extends StatefulWidget {
 
   MapScreen({
     this.initialLocation = const PlaceLocation(
-      latitude: 28.7041,
-      longitude: 77.1025, //Coordinates of Delhi, India
+      latitude: 55.751244,
+      longitude: 37.618423, //Coordinates of Moscow
     ),
     this.isSelecting = false,
   });

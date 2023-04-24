@@ -1,10 +1,10 @@
-import 'package:amnesia_place/screens/map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart' as latlng;
 
 import '../models/place.dart';
 import '../helper/location_manager.dart';
+import '../screens/map_screen.dart';
 
 class LocationInput extends StatefulWidget {
   final Function onSelectPlace;

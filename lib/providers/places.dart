@@ -2,19 +2,25 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 
+import '../models/UserInfo.dart';
 import '../models/place.dart';
 import '../helper/db_manager.dart';
 import '../helper/location_manager.dart';
 
-class Places with ChangeNotifier {
-  List<Place> _items = [];
+class ViewModel with ChangeNotifier {
+  List<Place> _placeItems = [];
 
-  List<Place> get items {
-    return [..._items];
+  UserInfo _userInfoItems = UserInfo(id: '0', name: '', surname: '');
+
+  UserInfo get userInfoItems {
+    return _userInfoItems;
+  }
+  List<Place> get placeItems {
+    return [..._placeItems];
   }
 
   Place findById(String id) {
-    return _items.firstWhere((place) => place.id == id);
+    return _placeItems.firstWhere((place) => place.id == id);
   }
 
   void addPlaces(
@@ -39,7 +45,7 @@ class Places with ChangeNotifier {
       
     );
 
-    _items.add(newPlace);
+    _placeItems.add(newPlace);
     notifyListeners();
     DBManager.insert(
       'user_places',
@@ -56,7 +62,7 @@ class Places with ChangeNotifier {
 
   Future<void> fetchAndSetPlaces() async {
     final dataList = await DBManager.getData('user_places');
-    _items = dataList
+    _placeItems = dataList
         .map(
           (item) => Place(
             id: item['id'],
@@ -70,5 +76,34 @@ class Places with ChangeNotifier {
           ),
         )
         .toList();
+  }
+
+  void addUserInfo(
+      String name,
+      String surname,
+      ) async {
+    final newInfo = UserInfo(
+        id: "0",
+        name: name,
+        surname: surname
+    );
+
+    _userInfoItems = newInfo;
+    notifyListeners();
+    DBManager.update('user_info', {
+      'id': newInfo.id,
+      'name': newInfo.name,
+      'surname': newInfo.surname,
+    });
+  }
+
+  Future<UserInfo> getUserInfo() async {
+    final dataList = await DBManager.getData('user_info');
+    _userInfoItems = dataList.map((item) => UserInfo(
+      id: item['id'],
+      name: item['name'],
+      surname: item['surname'],
+    )) as UserInfo;
+    return _userInfoItems;
   }
 }
